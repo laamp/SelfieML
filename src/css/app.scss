@@ -65,3 +65,13 @@ a {
         color: $primary-variant-color;
     }
 }
+
+.video-container {
+    position: relative;
+}
+
+canvas {
+    position: absolute;
+    top: 20px;
+    margin-top: 20px;
+}

@@ -8,7 +8,7 @@ const App = () => (
       <h1>Face Capture</h1>
     </header>
 
-    <section>
+    <section className="video-container">
       <Webcam />
     </section>
 
