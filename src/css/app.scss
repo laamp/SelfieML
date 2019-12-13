@@ -1,3 +1,61 @@
-* {
-    color: purple;
+@import "./vars.scss";
+
+body {
+    margin: 0;
+    background-color: $background-color;
+    color: #FFFFFF;
+    font-family: Roboto, Arial, sans-serif;
+}
+
+header {
+    background-color: $background3-color;
+    padding: 10px 0;
+    box-shadow: $shadow3;
+}
+
+section {
+    background-color: $background2-color;
+    box-shadow: $shadow2;
+    width: 800px;
+    height: 600px;
+    margin: 30px auto;
+}
+
+footer {
+    width: 800px;
+    margin: 0 auto;
+
+    div {
+        background-color: $background2-color;
+        box-shadow: $shadow2;
+        width: fit-content;
+        padding: 15px;
+    }
+
+    p {
+        margin: 0 0 5px 0;
+    }
+}
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+}
+
+a {
+    color: $primary-color;
+
+    &:hover {
+        color: $secondary-color;
+    }
+
+    &:active {
+        color: $primary-variant-color;
+    }
 }

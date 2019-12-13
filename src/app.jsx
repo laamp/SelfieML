@@ -4,15 +4,16 @@ import "./css/app.scss";
 const App = () => (
   <>
     <header>
-      <h1>Title</h1>
+      <h1>Face Capture</h1>
     </header>
 
-    <section>
-      <h2>main content</h2>
-    </section>
+    <section></section>
 
     <footer>
-      <p>Footer</p>
+      <div>
+        <p>Lance Smith 2019</p>
+        <a href="https://github.com/laamp/SelfieML">GitHub</a>
+      </div>
     </footer>
   </>
 );
