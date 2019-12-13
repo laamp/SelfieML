@@ -1,4 +1,5 @@
 import React from "react";
+import Webcam from "./webcam";
 import "./css/app.scss";
 
 const App = () => (
@@ -7,7 +8,9 @@ const App = () => (
       <h1>Face Capture</h1>
     </header>
 
-    <section></section>
+    <section>
+      <Webcam />
+    </section>
 
     <footer>
       <div>
