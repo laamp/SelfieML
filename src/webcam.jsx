@@ -48,22 +48,65 @@ class Webcam extends React.Component {
           displaySize
         );
 
-        if (resizedDetections.length > 0 && this.props.bSnapPhoto) {
-          const face = resizedDetections[0].box;
-
-          if (face.width > 200 && face.height > 200) {
-            if (face.x > 200 && face.x < 460 && face.y > 100 && face.y < 300) {
-              this.takePicture();
-            }
-          }
-        }
+        // evaluation for taking a photo
+        this.evaluateFace(resizedDetections);
 
         this.canvas
           .getContext("2d")
           .clearRect(0, 0, this.canvas.width, this.canvas.height);
         faceapi.draw.drawDetections(this.canvas, resizedDetections);
-      }, 500);
+      }, 100);
     });
+  }
+
+  evaluateFace(detection) {
+    /* potential errors:
+        - photo already taken
+        - no face detected
+        - too far away (bounding box size)
+        - too close (bounding box size)
+        - too far left, right, up, or down (bounding box location)
+    */
+
+    if (!this.props.bSnapPhoto) {
+      this.props.setErrors([]);
+      return;
+    }
+
+    if (detection.length < 1) {
+      this.props.setErrors(["No face detected"]);
+      return;
+    }
+
+    const face = detection[0].box;
+    let errors = [];
+
+    if (face.height > 300 || face.width > 300) {
+      errors.push("You are too close");
+      this.props.setErrors(errors);
+      return;
+    }
+    if (face.height < 200 || face.width < 200) {
+      errors.push("You are too far away");
+    }
+    if (face.x < 180) {
+      errors.push("You are too far right");
+    }
+    if (face.x + face.width > 480) {
+      errors.push("You are too far left");
+    }
+    if (face.y < 90) {
+      errors.push("You are too high");
+    }
+    if (face.y + face.height > 390) {
+      errors.push("You are too low");
+    }
+
+    if (errors.length === 0) {
+      this.takePicture();
+    } else {
+      this.props.setErrors(errors);
+    }
   }
 
   getVideo() {

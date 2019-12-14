@@ -67,15 +67,63 @@ a {
 }
 
 .controls {
-    height: 200px;
+    height: 280px;
     display: flex;
     flex-direction: row;
+    justify-content: space-evenly;
 
-    .picture-preview {
-        margin: 20px;
+    .controls-left {
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        width: 280px;
 
-        img {
-            height: 100%;
+        .picture-preview {
+            margin: 10px 0 0 0;
+            background-color: $background3-color;
+            box-shadow: $shadow2;
+            height: 74%;
+
+            img {
+                width: 100%;
+            }
+        }
+    }
+
+    .controls-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-evenly;
+        padding: 12px;
+        width: 70%;
+
+        .text-output {
+            background-color: $background3-color;
+            box-shadow: $shadow2;
+            height: 180px;
+
+            .success {
+                color: $secondary-color;
+                margin: 0;
+                padding: 20px;
+            }
+
+            .error {
+                color: $error-color;
+                list-style: none;
+                margin: 0;
+                padding: 20px;
+
+                li {
+                    margin-bottom: 5px;
+                }
+            }
+        }
+
+        .buttons {
+            margin-top: 7px;
+            display: flex;
+            justify-content: space-evenly;
         }
     }
 

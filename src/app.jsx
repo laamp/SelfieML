@@ -7,10 +7,12 @@ class App extends React.Component {
     super();
 
     this.state = {
-      bSnapPhoto: true
+      bSnapPhoto: true,
+      errors: []
     };
 
     this.toggleState = this.toggleState.bind(this);
+    this.setErrors = this.setErrors.bind(this);
     this.reset = this.reset.bind(this);
     this.confirmPhoto = this.confirmPhoto.bind(this);
   }
@@ -19,8 +21,12 @@ class App extends React.Component {
     this.setState({ bSnapPhoto: bShouldTakePhoto });
   }
 
+  setErrors(errs) {
+    this.setState({ errors: errs });
+  }
+
   reset() {
-    this.setState({ bSnapPhoto: true });
+    this.setState({ bSnapPhoto: true, errors: [] });
     document.querySelector(".picture-preview").innerHTML = "";
   }
 
@@ -45,18 +51,41 @@ class App extends React.Component {
           <Webcam
             bSnapPhoto={this.state.bSnapPhoto}
             toggleState={this.toggleState}
+            setErrors={this.setErrors}
           />
           <div className="bounding-box"></div>
         </section>
 
         <section className="controls">
-          <div className="picture-preview"></div>
-          <button onClick={this.reset} className="reset">
-            <h3>RESET CAMERA</h3>
-          </button>
-          <button onClick={this.confirmPhoto} className="reset">
-            <h3>CONFIRM PHOTO</h3>
-          </button>
+          <div className="controls-left">
+            <h2>Preview</h2>
+            <div className="picture-preview"></div>
+          </div>
+          <div className="controls-right">
+            <div className="text-output">
+              {this.state.errors.length < 1 ? (
+                <p className="success">
+                  {this.state.bSnapPhoto
+                    ? "Loading..."
+                    : "Photo captured (Click 'reset camera' to take another)"}
+                </p>
+              ) : (
+                <ul className="error">
+                  {this.state.errors.map((err, i) => (
+                    <li key={`err-${i}`}>{err}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            <div className="buttons">
+              <button onClick={this.reset} className="reset">
+                <h3>RESET CAMERA</h3>
+              </button>
+              <button onClick={this.confirmPhoto} className="reset">
+                <h3>CONFIRM PHOTO</h3>
+              </button>
+            </div>
+          </div>
         </section>
 
         <footer>
