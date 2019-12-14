@@ -1,12 +1,17 @@
 import React from "react";
 import * as faceapi from "face-api.js";
+import "./css/webcam.scss";
 
 class Webcam extends React.Component {
   constructor() {
     super();
 
+    this.state = {
+      bSnapPhoto: true
+    };
+
     this.getVideo = this.getVideo.bind(this);
-    window.getVideo = this.getVideo;
+    this.takePicture = this.takePicture.bind(this);
 
     // load models here
     Promise.all([
@@ -15,6 +20,8 @@ class Webcam extends React.Component {
       // faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
       // faceapi.nets.faceExpressionNet.loadFromUri("/models")
     ]).then(this.getVideo);
+
+    window.takePicture = this.takePicture;
   }
 
   componentDidMount() {
@@ -23,14 +30,13 @@ class Webcam extends React.Component {
 
     this.video.addEventListener("play", () => {
       // create canvas for bounding boxes
-      const canvas = faceapi.createCanvasFromMedia(this.video);
-      canvas.style.marginLeft = "80px";
-      document.querySelector(".video-container").append(canvas);
+      this.canvas = faceapi.createCanvasFromMedia(this.video);
+      document.querySelector(".video-container").append(this.canvas);
       const displaySize = {
         width: this.video.width,
         height: this.video.height
       };
-      faceapi.matchDimensions(canvas, displaySize);
+      faceapi.matchDimensions(this.canvas, displaySize);
 
       setInterval(async () => {
         const detections = await faceapi.detectAllFaces(
@@ -46,11 +52,21 @@ class Webcam extends React.Component {
           displaySize
         );
 
-        canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-        faceapi.draw.drawDetections(canvas, resizedDetections);
+        if (resizedDetections.length > 0 && this.state.bSnapPhoto) {
+          const face = resizedDetections[0].box;
 
-        console.log(detections);
-      }, 100);
+          if (face.width > 200 && face.height > 200) {
+            if (face.x > 200 && face.x < 460 && face.y > 100 && face.y < 300) {
+              this.takePicture();
+            }
+          }
+        }
+
+        this.canvas
+          .getContext("2d")
+          .clearRect(0, 0, this.canvas.width, this.canvas.height);
+        faceapi.draw.drawDetections(this.canvas, resizedDetections);
+      }, 500);
     });
   }
 
@@ -64,6 +80,20 @@ class Webcam extends React.Component {
         this.video.srcObject = stream;
       })
       .catch(err => console.error(err));
+  }
+
+  takePicture() {
+    this.setState({ bSnapPhoto: false });
+
+    const newCanvas = document.createElement("canvas");
+    const ctx = newCanvas.getContext("2d");
+    newCanvas.width = this.video.videoWidth;
+    newCanvas.height = this.video.videoHeight;
+    ctx.drawImage(this.video, 0, 0);
+    const data = newCanvas.toDataURL("image/png");
+    document.querySelector(
+      ".picture-preview"
+    ).innerHTML = `<img src="${data}" alt="Click to send" />`;
   }
 
   render() {

@@ -10,6 +10,12 @@ const App = () => (
 
     <section className="video-container">
       <Webcam />
+      <div className="bounding-box"></div>
+    </section>
+
+    <section className="controls">
+      <div className="picture-preview"></div>
+      <button className="reset"></button>
     </section>
 
     <footer>
