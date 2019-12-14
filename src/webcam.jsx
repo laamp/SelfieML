@@ -3,12 +3,8 @@ import * as faceapi from "face-api.js";
 import "./css/webcam.scss";
 
 class Webcam extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      bSnapPhoto: true
-    };
+  constructor(props) {
+    super(props);
 
     this.getVideo = this.getVideo.bind(this);
     this.takePicture = this.takePicture.bind(this);
@@ -52,7 +48,7 @@ class Webcam extends React.Component {
           displaySize
         );
 
-        if (resizedDetections.length > 0 && this.state.bSnapPhoto) {
+        if (resizedDetections.length > 0 && this.props.bSnapPhoto) {
           const face = resizedDetections[0].box;
 
           if (face.width > 200 && face.height > 200) {
@@ -83,7 +79,7 @@ class Webcam extends React.Component {
   }
 
   takePicture() {
-    this.setState({ bSnapPhoto: false });
+    this.props.toggleState(false);
 
     const newCanvas = document.createElement("canvas");
     const ctx = newCanvas.getContext("2d");
